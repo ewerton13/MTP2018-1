@@ -1,3 +1,5 @@
+//Ewerton Henrique Costa Calmon
+//11711EEL016
 #include <stdio.h>
 
 void codifica ()
