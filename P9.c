@@ -1,138 +1,115 @@
 //Ewerton Henrique Costa Calmon
 //11711EEL016
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#define ESTOQUE_MAX 100
 
-int n=0;
-struct Dimensoes
+typedef struct Dimensao{
+    float largura;
+    float altura;
+    float profundidade;
+}
+Dimensao;
 
-{
-	float largura;
-	float profundidade;
-	float altura;
-};
-struct Produto
-{
-	char nome [63];
-	float preco;
-	float dimensoes;
-	struct Dimensoes end;	
-};
+typedef struct Produto{
+    char nomePro[64];
+    float preco;
+    Dimensao dimensao;
+}Produto;
 
-struct Produto produtos[ESTOQUE_MAX];
+void cadastra(Produto * p){
 
-void preencher (void)
-{
-	int i;
-	printf("Digite quantos produtos deseja cadastrar:   \n");
-	scanf("%d",&n);
-	for( i = 0;  i < n ; i++ )
-	{
-		printf("Nome:         \n");
-		scanf("%s", produtos[i].nome);
-		getchar();
-		printf("Preco:        \n");
-		scanf("%f",&produtos[i].preco);
-		getchar();
-		printf("Dimensoes:    \n");
-		scanf("%f",&produtos[i].dimensoes);
-		getchar();
-		printf("largura:      \n");
-		scanf("%f",&produtos[i].end.largura);
-		getchar();
-		printf("Profundidade: \n");
-		scanf("%f",&produtos[i].end.profundidade);
-		getchar();
-		printf("Altura:       \n");
-		scanf("%f", &produtos[i].end.altura);
-		getchar();
-		printf("--------------------------------------------------------");
-	}
+    printf("\nDigite o nome do produto: ");
+    fgets(p->nomePro, 64, stdin);
+    p->nomePro[strlen(p->nomePro)-1] = '\0';
+
+    printf("\nDigite o preco: ");
+    scanf("%f", &(p->preco));
+    getchar();
+
+    printf("\nDigite a largura: ");
+    scanf("%f", &(p->dimensao.largura));
+    getchar();
+
+    printf("\nDigite a profundidade: ");
+    scanf("%f", &(p->dimensao.profundidade));
+    getchar();
+
+    printf("\nDigite a altura: ");
+    scanf("%f", &(p->dimensao.altura));
 }
 
-void mostrar(int n)
-{
-	int i;
-	for (i = 0 ; i < n ; i++)
-	{
-		printf("\n\n");
-		printf("Nome e: %s\n", produtos[i].nome);
-		printf("Preco e: %f\n", produtos[i].preco);
-		printf("Dimensoes e: %f\n", produtos[i].dimensoes);
-		printf("Largura e: %f\n", produtos[i].end.largura);
-		printf("Profundidade e:%f\n", produtos[i].end.profundidade);
-		printf("Altura e:%f\n", produtos[i].end.altura);
-		printf("--------------------------------------------------------");
-	}
+void consulta(Produto * p){
+    char c;
+
+    if(strlen(p->nomePro) == 0){
+        printf("\nProduto nao cadastrado!\n");
+        while((c=getchar()) != '\n');
+        return;
+    }
+
+    printf("\n%s, R$ %.2f, L: %.2fm x P: %.2fm x A: %.2fm\n",
+    p->nomePro, p->preco,(p->dimensao.largura),(p->dimensao.profundidade), (p->dimensao.altura));
+    while((c=getchar())!='\n');
 }
 
-void buscar()
-{
-	int i=0, j=0;
-	char str[63];
-	
-	printf("\nDigite o nome do produto que deseja buscar:  ");
-	getchar ();
-	scanf("%[^\n]",str);
-	printf ("\n");
-		
-	while(1)
-	{
-		if (i == n)
-		{
-			printf ("\nProduto nao cadastrado.\n\n");
-			printf("--------------------------------------------------------");
-			break;		
-		}
-		if(strcmp(str,produtos[i].nome)!=0)
-		{
-			i++;
-		}
-	
-		if (strcmp(str, produtos[i].nome) == 0)
-		{
-				printf("Nome e: %s\n", produtos[i].nome);
-				printf("Preco e: %f\n", produtos[i].preco);
-				printf("Dimensoes e: %f\n", produtos[i].dimensoes);
-				printf("Largura e: %f\n", produtos[i].end.largura);
-				printf("Profundidade e:%f\n", produtos[i].end.profundidade);
-				printf("Altura e:%f\n", produtos[i].end.altura);
-				printf("--------------------------------------------------------");
-				printf("\n\n\n");
-				break;
-		}
-	}
-}
+int main(){
+    int flag=0, flag2;
+    Produto * produtos = calloc(2, sizeof(Produto));
+    char str[2][16] = {"Cadastro", "Consulta"};
 
-int main()
-{
-	int a=0;
-	struct Produto produtos;
-	
-	do
-	{
-	printf("\n");
-	printf("\n\t [1] - Para cadastrar:     \n");
-	printf("\t [2] - Mostar os produtos: \n");
-	printf("\t [3] - Buscar o produto:   \n");
-	printf("\t [4] - Sair do programa:   \n");
-	printf("--------------------------------------------------------\n\n");
-	scanf("%d",&a);
-	
-		switch(a)
-		{
-			case 1:
-				preencher();
-				break;
-			case 2:
-				mostrar(n);
-				break;
-			case 3:
-				buscar();
-				break;
-		}
-	}while (a != 4);
-	
-	return 0;
+    do{
+       printf("\n1 - Cadastrar\n2 - Consulta\n3 - Sair\n-- ");
+        scanf("%d", &flag);
+        getchar();
+
+        flag2 = 0;
+
+        	if(flag==1){
+        		printf("\nRealizar %s\n", str[flag-1]);
+         		printf("\n1 - Produto 1\n2 - Produto 2\n3 - Voltar\n-- ");
+   	     		scanf("%d", &flag2);
+   	     		getchar();
+
+   	     		switch(flag2){
+
+                        case 1:
+                            printf("\nProduto %d\n", flag2);
+                            cadastra(&produtos[flag2-1]);
+                          	break;
+
+                        case 2:
+                            printf("\nProduto %d\n", flag2);
+                            cadastra(&produtos[flag2-1]);
+                          	break;
+                    		}
+
+                    	}
+
+			if(flag==2){
+        		printf("\nRealizar %s\n", str[flag-1]);
+         		printf("\n1 - Produto 1\n2 - Produto 2\n3 - Voltar\n-- ");
+   	     		scanf("%d", &flag2);
+   	     		getchar();
+
+   	     		switch(flag2){
+
+                        case 1:
+                            printf("\nProduto %d\n", flag2);
+                            consulta(&produtos[flag2-1]);
+                          	break;
+
+                        case 2:
+                            printf("\nProduto %d\n", flag2);
+                            consulta(&produtos[flag2-1]);
+                          	break;
+                    		}
+
+						}
+	}while(flag!=3);
+
+	free(produtos);
+
+    return 0;
 }
